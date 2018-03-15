@@ -21,10 +21,13 @@ app . get ( '/' , function ( req , res ){
 
 // attemptLogin AJAX
 app.post('/attemptLogin', urlencodedParser, function(req, res){
+    console.log("recieved /attemptLogin post request");
   var input = {
     username:req.body.username,
     password:req.body.password
   };
+  console.log(input.username);
+  console.log(input.password);
     if (input.username==="name"&&input.password==="pass"){
         res.status(200);
         res.end();

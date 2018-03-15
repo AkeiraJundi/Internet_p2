@@ -11,13 +11,13 @@
     <div class = "Login">
     <h2> Login</h2>
     <br>
-    <input type= "text" name = "username" placeholder= "Username">
+    <input type= "text" name = "username" class="username" placeholder= "Username">
     <br>
     <br>
-    <input type = "password" name="password" placeholder="Password">
+    <input type = "password" name="password" class="password"  placeholder="Password">
     <br>
     <br>
-    <button class="loginButton" type ="submit"value="Login">
+    <button class="loginButton" type ="submit"value="Login"> </button>
     <br>
     <br>
     <a href="#">Forget Your Password</a>
@@ -26,13 +26,16 @@
 
 <script>
     $(document).ready(()=>{
-        $.post(".loginButton").click(function(){
+        $(".loginButton").click(function(){
+            console.log($(".username").val());
             $.post('/attemptLogin',{
-                userName:$("username").text(),
-                password:$("password").text()
+                username:$(".username").val(),
+                password:$(".password").val()
             }, function(data, status){
-                if (status ===200) alert("request sent succ");
+              console.log("post finished");
+                if (status =="success") alert("request sent succ");
                 else alert("request sent but no succ");
+
             })
         })
     })
