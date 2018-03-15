@@ -1,0 +1,85 @@
+
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <title>
+    Login Form
+    </title>
+
+</head>
+<body>
+    <div class = "Login">
+    <h2> Login</h2>
+    <br>
+    <input type= "text" name = "username" placeholder= "Username">
+    <br>
+    <br>
+    <input type = "password" name="password" placeholder="Password">
+    <br>
+    <br>
+    <button class="loginButton" type ="submit"value="Login">
+    <br>
+    <br>
+    <a href="#">Forget Your Password</a>
+    </div>
+</body>
+
+<script>
+    $(document).ready(()=>{
+        $.post(".loginButton").click(function(){
+            $.post('/attemptLogin',{
+                userName:$("username").text(),
+                password:$("password").text()
+            }, function(data, status){
+                if (status ===200) alert("request sent succ");
+                else alert("request sent but no succ");
+            })
+        })
+    })
+</script>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#BF3F8C;
+    }
+
+    .login{
+    background:#fff;
+    padding:40px;
+    width:240px;
+    margin:auto;
+    margin-top:50px;
+    height:300px;
+    }
+    form{
+
+    width:240px;
+    text-align:center;
+    }
+    input{
+    width :240px;
+    text-align:center;
+    background:#ecf0f1;
+    border-radius:3px;
+    font-size:16px;
+    font-weight:200;
+    padding:10px 0;
+    transition:border .5s;
+    }
+    input[type=submit]{
+    border:2px solid transparent;
+    background:#3498db;
+    color:white;
+    font-size:16px;
+    line-height:25px;
+    padding:10px 0;
+    border-radius:3px;}
+    input[type=submit]:hover{
+    background:#2980b9;}
+    h2{color:gray;}
+
+
+    </style>
+</html>
