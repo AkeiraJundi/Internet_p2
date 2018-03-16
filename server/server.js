@@ -3,6 +3,10 @@ var app = express ();
 var fs = require('fs');
 var bodyParser = require('body-parser');
 
+const NodeCouchDb=require('node-couchdb');
+
+const couchdb=new NodeCouchDb();
+
 
 app.set ('port' , process.env.PORT || 3005);
 
@@ -61,4 +65,41 @@ app.listen (app.get( 'port' ), function (){
 
 ///////////////////////////////////////////////////////////////////////////////
 
-var user={username:"username",password:"password",email:"email"};
+
+/**
+*Class name: User
+*Attributes: username,password,email
+*Methods: 
+            generateid(): Creates a unique id for the document before registration (Called within register function)
+            register(): Registers the user with given details
+*
+*/
+function user(username, password, email) {
+    this.username = username;
+    this.password = password;
+    this.email = email;
+}
+
+user.prototype.generateid = function () {
+    var ids;
+    couch.uniqid().then(ids => ids[0]);
+    this.id = ids;
+}
+
+user.prototype.register = function () {
+
+    //TODO: check if the user with given details already exists
+    this.generateid();
+    couch.insert("user-info", {
+        _id: this.id,
+        username: this.username,
+        password: this.password,
+        email: this.email
+    }).then(({ data, header, status }) => {
+        console.log(data);
+        console.log(header);
+        console.log(status);
+    }, err => {
+        console.log("Error" + err);
+    });
+}
