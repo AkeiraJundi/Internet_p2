@@ -1,0 +1,80 @@
+
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="style/signup.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <title>
+    SignUp Form
+  </title>
+  </head>
+  <body>
+    <div class = "Login">
+      <!-- Form will send new user information to the server -->
+        <h2> SignUp</h2>
+        <p id="status"></p>
+        <br>
+        <input id="username" type= "text" name = "username" placeholder= "Username">
+        <br>
+        <br>
+        <input id="email" type "email" name = "email" placeholder="email">
+        <br>
+        <br>
+        <input id="password" type = "password" name="password" placeholder="Password">
+        <br>
+        <br>
+        <input id="confirmpassword" type = "confirm password" name="confirmassword" placeholder="confirm password">
+        <br>
+        <br>
+        <button id="attemptRegister" type ="submit" value="signup">Sign up</button>
+        <br>
+        <br>
+    </div>
+  </body>
+  <script>
+    function validateEmail(email) {
+  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
+
+
+    $(document).ready(()=>{
+      $("#attemptRegister").click(()=>{
+        // check request contents
+        if (!validateEmail($("#email").val()))
+        {
+          $("#status").text("Email is not an email");
+        }
+        else if ($("#username").val()==="")
+        {
+          $("#status").text("Username field is empty");
+        }
+        else if ($("#password").val()==="")
+        {
+          $("#status").text("Password field is empty");
+        }
+        else if ( $("#password").val()!== $("#confirmpassword").val() ) //  check passwords match
+        {
+          $("#status").text("Passwords don't match");
+        }
+        else 
+        {
+          $.post('/attemptRegister',
+            {
+              username: $("#username").val(),
+              email:  $("#email").val(),
+              password:  $("#password").val(),
+            },
+            function(data, status)
+            {
+              // check response from server
+              if (data==="true"){
+                window.location.href="/";
+              }
+              else {
+                $("#status").text(data);
+              }
+            });
+        }
+    })});
+  </script>
+  </html>

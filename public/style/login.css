@@ -26,7 +26,7 @@ body{
     padding:10px 0;
     transition:border .5s;
     }
-    input[type=submit]{
+    button{
     border:2px solid transparent;
     background:#3498db;
     color:white;
@@ -34,7 +34,7 @@ body{
     line-height:25px;
     padding:10px 0;
     border-radius:3px;}
-    input[type=submit]:hover{
+    button:hover{
     background:#2980b9;}
     h2{color:gray;}
     
