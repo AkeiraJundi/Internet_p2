@@ -38,12 +38,13 @@
                 if (data == "false") {
                     $("#status").text("user not found");
                 } else {
-                    window.location.href = "/public/homepage.html";
+                    // should redirect to home directory for consistancy 
+                    window.location.href = "/homepage.html";
                 }
             })
         })
         $(".registerButton").click(function(){
-            window.location.href = "/public/signup.html";
+            window.location.href = "signup";
     })
 })
 </script>

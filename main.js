@@ -1,8 +1,10 @@
-var express = require ('express');
-var app = express ();
-var fs = require('fs');
-var bodyParser = require('body-parser');
+const express = require ('express');
+const  app = express ();
+const  fs = require('fs');
+const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
 
+const saltRounds = 10;
 
 app.set ('port' , process.env.PORT || 3005);
 app.use ( express.static ( __dirname));
@@ -12,6 +14,8 @@ var urlencodedParser = bodyParser.urlencoded({ extended:false });
 // landing page (currently login)
 app . get ( '/' , function ( req , res ){
     res . set ( 'Content-Type' , 'text/html' );
+    // check cookies
+    // if no cookies, send login page
     fs.readFile('login.html', function(err, data){
         if (err) throw err;
         else {
@@ -20,6 +24,7 @@ app . get ( '/' , function ( req , res ){
     })
 });
 
+// send sign up page on request
 app . get ( '/signup' , function ( req , res ){
     res . set ( 'Content-Type' , 'text/html' );
     fs.readFile('public/signup.html', function(err, data){
@@ -36,9 +41,8 @@ app.get('/attemptLogin', function(req, res){
         username:req.query.username,
         password:req.query.password
     }
-    // check credentials from database
-
-    console.log(JSON.stringify(credentials));
+    // get credentials from database
+    // compare 
     res.set('Content-Type', 'text/plain');
     if (credentials.username==="name")
     {
@@ -69,6 +73,27 @@ app.post('/attemptRegister',urlencodedParser, function(req, res){
 
 })
 
+// search for a location
+app.get('/searchLocationString', function(req, res){
+    var query = req.query;
+    // search for place in database
+    // retrieve array of LatLng values
+    var beacons = {
+        beacons:[
+            {lat: 37.721325,
+            lng: -122.479749},
+            {lat:  37.721516,
+            lng:  -122.479545},
+            {lat: 37.7214285,
+            lng: -122.479691},
+            {lat: 37.721400,
+            lng: -122.479569}
+        ]
+    }
+    console.log(JSON.stringify(beacons));
+    res.end(JSON.stringify(beacons));
+})
+
 // custom 404 page
 app.use ( function ( req , res ){
     res.type ( 'text/plain' );
@@ -79,20 +104,4 @@ app.use ( function ( req , res ){
 app.listen (app.get( 'port' ), function (){
     console.log ('Express started on http://localhost:' +
     app.get ('port') + '; press Ctrl-C to terminate.' );
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-
-var user={username:"username",password:"password",email:"email"};
+});

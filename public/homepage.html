@@ -2,9 +2,10 @@
 <html>
     
 <head>
-<title>
-    Homepage || Welcome, <span id='username'></span>!
-</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <title>
+        Homepage || Welcome, <span id='username'></span>!
+    </title>
 </head>
 <body>
     <div id="map" style="width:400px;height:400px" onkeypress="movelocation()"></div>
@@ -14,7 +15,7 @@
     </button>
 
     <input id="search_field" type="text">
-    <button onclick="findRoute()">search for location</button>
+    <button id="searchbutton">search for location</button>
 
 </body>
 <script>
@@ -76,17 +77,35 @@ window.initMap = function() {
     centerMarker.setMap(map);
 }
 
+$(document).ready(function(){
+    $("#searchbutton").click(function(){
+        $.get('/searchLocationString',{
+            query:$("#search_field").val()
+        }, function(data, status){
+            console.log(JSON.parse(data));
+            var jsonInput = JSON.parse(data);
+            var beacons= [];
+            for (var i =0; i<jsonInput.beacons.length;i++){
+                beacons.push(new google.maps.LatLng(jsonInput.beacons[i].lat, jsonInput.beacons[i].lng));
+            }
+            console.log(beacons);
+            createRoute(beacons);
+        })
+    })
+});
 
 function findRoute(){
-    var beacon0 = new google.maps.LatLng( 37.721325, -122.479749);
-    var beacon1 = new google.maps.LatLng( 37.721516, -122.479545);
-    var beacon2 = new google.maps.LatLng(37.721428, -122.479691);
-    var beacon3 = new google.maps.LatLng(37.721400, -122.479569);
-    var beacon4 = new google.maps.LatLng(37.721502, -122.479531);
-    var beacon5 = new google.maps.LatLng(37.721692, -122.479451);
-    var beacon6 = new google.maps.LatLng(37.721810, -122.479884);
-    var beacon7 = new google.maps.LatLng(37.721570, -122.480226);
-    var beacon8 = new google.maps.LatLng(37.721466, -122.480271);
+
+
+    // var beacon0 = new google.maps.LatLng( 37.721325, -122.479749);
+    // var beacon1 = new google.maps.LatLng( 37.721516, -122.479545);
+    // var beacon2 = new google.maps.LatLng(37.721428, -122.479691);
+    // var beacon3 = new google.maps.LatLng(37.721400, -122.479569);
+    // var beacon4 = new google.maps.LatLng(37.721502, -122.479531);
+    // var beacon5 = new google.maps.LatLng(37.721692, -122.479451);
+    // var beacon6 = new google.maps.LatLng(37.721810, -122.479884);
+    // var beacon7 = new google.maps.LatLng(37.721570, -122.480226);
+    // var beacon8 = new google.maps.LatLng(37.721466, -122.480271);
     var query = document.getElementById("search_field").value;
     var cleanedQuery = query.replace(/\s/g, "").toLowerCase();
     switch(cleanedQuery){
