@@ -35,11 +35,11 @@
                 username:$(".username").val(),
                 password:$(".password").val()
             }, function(data, status){
-                if (data == "false") {
+                if (status == 500) {
                     $("#status").text("user not found");
                 } else {
-                    // should redirect to home directory for consistancy 
-                    window.location.href = "/homepage.html";
+                    // should redirect to home directory for consistancy
+                    window.location.href = "public/homepage.html";
                 }
             })
         })

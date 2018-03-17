@@ -56,7 +56,7 @@
         {
           $("#status").text("Passwords don't match");
         }
-        else 
+        else
         {
           $.post('/attemptRegister',
             {
@@ -67,7 +67,7 @@
             function(data, status)
             {
               // check response from server
-              if (data==="true"){
+              if (status!==500){
                 window.location.href="/";
               }
               else {
