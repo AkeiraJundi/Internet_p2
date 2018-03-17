@@ -1,32 +1,34 @@
-
+var express = require('express');
+var app = express();
+var fs = require('fs');
+var bodyParser = require('body-parser');
 
 const NodeCouchDb = require('node-couchdb');
 
 const couch = new NodeCouchDb();
 
 //Database names
-const u_db = "user-info"; 
+const u_db = "user-info";
 const u_cookie = "cookie";
 
 
 /**
 *Class name: User
 *Attributes: username,password,email
-*Methods:
+*Methods: 
             generateid(): Creates a unique id for the document before registration (Called within register function)
             register(): Registers the user with given details
 *
 */
 
-module.exports= class User{
-    
+var User=class User{
     constructor(username, password, email) {
         this.username = username;
         this.password = password;
         this.email = email;
     }
-
-    generateid () {
+    
+    generateid = function () {
         var ids;
         couch.uniqid().then(ids => ids[0]);
         this.id = ids;
@@ -54,15 +56,15 @@ module.exports= class User{
                 }, err => {
                     console.log("Error" + err);
                 });
-
+    
             });
-
+    
             if (!err)
                 resolve(status);
             else
                 reject(err);
         });
-
+    
         return res;
     }
 
@@ -76,20 +78,20 @@ module.exports= class User{
             }, err => {
                 err="Username/email does not exist";
             });
-
+    
             if (!err)
                 resolve(status);
             else
                 reject(err);
         });
-
+    
         return res;
     }
+    
+} 
 
-}
 
-
-function check_user_exist (email, username) {
+check_user_exist = function (email, username) {
     const res = new Promise((resolve, reject) => {
         var status;
         var err = "User does not exist";
@@ -123,3 +125,5 @@ function check_user_exist (email, username) {
 
 
 
+
+module.exports=User;

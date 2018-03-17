@@ -1,16 +1,19 @@
+// 'use strict';
+
 var express = require ('express');
 var  app = express ();
 const  fs = require('fs');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
-const database = require('/db.js');
 
 const NodeCouchDb = require('node-couchdb');
 
 const COOKIE = "chipsAhoy";
 
 const couch = new NodeCouchDb();
+
+let User = require('./db.js');
 
 
 
@@ -62,7 +65,7 @@ app.get('/attemptLogin', function(req, res){
     var user = new User(req.query.username, req.query.username, req.query.password);
     res.set('Content-Type','text/plain');
     user.authenticate().then((code)=>{
-            res.cookie(COOKIE, credentials.username, {maxAge: 360000, secure: true});
+            res.cookie(COOKIE, credentials.username, {maxAge: 3600000, secure: true});
             res.send('true');
     }, (error)=>{
       res.status(500);
@@ -74,15 +77,16 @@ app.get('/attemptLogin', function(req, res){
 app.post('/attemptRegister',urlencodedParser, function(req, res){
 
      var newUser = new User(req.body.email, req.body.username, req.body.password);
-     newUser.register().then(((code)=>{
+     newUser.register().then((code)=>{
+         res.status(200);
          res.send(code);
          },
      (error)=>{
        res.status(500);
        res.end(error);
-     }))
+     });
   //   promise.then
-})
+})  
 
 // search for a location
 app.get('/searchLocationString', function(req, res){
