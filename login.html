@@ -1,51 +1,57 @@
-
 <html>
+
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <title>
-    Login Form
+        Login Form
     </title>
     <link rel="stylesheet" type="text/css" href="public/style/login.css">
 
 </head>
+
 <body>
-    <p id="status"></p>
-    <div class = "Login">
-    <h2> Login</h2>
-    <br>
-    <input type= "text" name = "username" class="username" placeholder= "Username">
-    <br>
-    <br>
-    <input type = "password" name="password" class="password"  placeholder="Password">
-    <br>
-    <br>
-    <button class="loginButton" type ="submit"value="Login">Login</button>
-    <button class="registerButton" type ="submit">Sign up</button>
-    <br>
-    <br>
-    <a href="#">Forget Your Password</a>
+    
+    <div class="Login">
+        <p id="status"></p>
+        <h2> Login</h2>
+        <br>
+        <input type="text" name="username" class="username" placeholder="Username">
+        <br>
+        <br>
+        <input type="password" name="password" class="password" placeholder="Password">
+        <br>
+        <br>
+        <button class="loginButton" type="submit" value="Login">Login</button>
+        <button class="registerButton" type="submit">Sign up</button>
+        <br>
+        <br>
+        <a href="#">Forgot Your Password</a>
     </div>
 </body>
 
 <script>
-    $(document).ready(()=>{
-        $(".loginButton").click(function(){
+    $(document).ready(() => {
+        $(".loginButton").click(function () {
             console.log($(".username").val());
-            $.get('/attemptLogin',{
-                username:$(".username").val(),
-                password:$(".password").val()
-            }, function(data, status){
-                if (status == 500) {
-                    $("#status").text("user not found");
-                } else {
+            $.post('/attemptLogin', {
+                username: $(".username").val(),
+                password: $(".password").val()
+            }, function (data, status) {
+                if (data==='true') {
                     // should redirect to home directory for consistancy
                     window.location.href = "public/homepage.html";
+                } else {
+                    $("#status").text(data);
+                    $("#status").css('background-color','red');
+                    $("#status").css('color','white');
+                    $("#status").css('text-align','center');
                 }
             })
         })
-        $(".registerButton").click(function(){
+        $(".registerButton").click(function () {
             window.location.href = "signup";
+        })
     })
-})
 </script>
+
 </html>
