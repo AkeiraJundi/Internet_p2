@@ -2,7 +2,11 @@
 
 const NodeCouchDb = require('node-couchdb');
 
-const couch = new NodeCouchDb();
+const couch = new NodeCouchDb({
+    host:'10.11.235.179',
+    port:5984,
+    protocol:'http'
+});
 
 //Database names
 const u_db = 'user-info';

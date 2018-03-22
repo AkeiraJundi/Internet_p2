@@ -17,37 +17,12 @@
     <input id="search_field" type="text">
     <button id="searchbutton">search for location</button>
 
+    <div id="beacon_status">
+        <button id="check_status_button">Check Status</button>
+    </div>
+
 </body>
 <script>
-
-//////////////////////////////////////////////////////
-// In case of no hardcode
-
-// function submitForm() {
-//     var http = new XMLHttpRequest();
-//     http.open("POST", "search_field", true);
-//     http.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-//     var params = "search=" +document.getElementById("location").value; // probably use document.getElementById(...).value
-//     http.send(params);
-//     http.onload = function() {
-//         var results = JSON.parse(http.responseText);
-        
-//         alert(http.responseText);
-//     }
-// }
-
-//  var showRoute = function(route){
-//      var beacons = [];
-//      for (var i =0; i<route.length; i++){
-//          var beaconLocation = new google.maps.LatLng( route.beacons[i].lat,route.beacons[i].long);
-//          beacons.push(beaconLocation);
-//      }
-//     createRoute(beacons);
-//  }
-
-
-
-//////////////////////////////////////////////////////
 
 const KnuthMusicHalll = "knuthmusichall";
 const LittleTheater = "littletheater";
@@ -76,6 +51,22 @@ window.initMap = function() {
     });
     centerMarker.setMap(map);
 }
+            var locs = [{
+                lat: 37.721325,
+                lng: -122.479749
+            },
+            {
+                lat: 37.721516,
+                lng: -122.479545
+            },
+            {
+                lat: 37.7214285,
+                lng: -122.479691
+            },
+            {
+                lat: 37.721400,
+                lng: -122.479569
+            }]
 
 $(document).ready(function(){
     $("#searchbutton").click(function(){
@@ -91,8 +82,26 @@ $(document).ready(function(){
             console.log(beacons);
             createRoute(beacons);
         })
+    });
+
+    $("#check_status_button").click(function(){
+        console.log("check status button clicked")
+        $.get('/beaconInfo', function (data, status){
+            console.log("GET /check_status_info ended");
+                console.log("recieved packet from GET /check_status_button")
+                $('#beacon_status').text("");
+                for (var i = 0; i< data.length; i++){
+                    var temp = data[i].temp;
+                    var light = data[i].light;
+
+                    $('#beacon_status').text($('#beacon_status').text+"Beacon "+i+":\n\tTemperature: "+temp+"\n\tLight: "+light);
+                }
+            
+        })
     })
+
 });
+
 
 function findRoute(){
 
@@ -154,9 +163,15 @@ function moveCenter(newLat, newLong){
     map.panTo(centerPosition);
 }
 
+var pathwayMarkers= [];
+
 var createRoute = function(beacons){
     if (route) route.setMap(null);
     if (destinationMarker) destinationMarker.setMap(null);
+    if (pathwayMarkers) 
+        for (var i = 0; i<pathwayMarkers.length; i++){
+            pathwayMarkers[i].setMap(null);
+        }
     route = new google.maps.Polyline({
                 path:beacons,
                 strokeColor:"#0000FF",
@@ -165,6 +180,25 @@ var createRoute = function(beacons){
             });
     route.setMap(map);
     var destinationMarkerLocation = beacons[beacons.length-1];
+    pathwayMarkers = [];
+    for (var i = 0; i< beacons.length; i++){
+        var pinIcon = new google.maps.MarkerImage(
+            "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FFFF00",
+            null, /* size is determined at runtime */
+            null, /* origin is 0,0 */
+            null, /* anchor is bottom center of the scaled image */
+            new google.maps.Size(21, 34)
+        );
+
+        var marker =  new google.maps.Marker({
+            position: beacons[i],
+            label:i+1,
+            icon: pinIcon
+        });
+        marker.setMap(map);
+    
+        pathwayMarkers.push(marker)
+    }
     destinationMarker = new google.maps.Marker({
         position: destinationMarkerLocation,
         animation: google.maps.Animation.BOUNCE});

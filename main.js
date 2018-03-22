@@ -166,6 +166,31 @@ app.get('/searchLocationString', function (req, res) {
     res.end(JSON.stringify(beacons));
 })
 
+/////////////////
+
+// testing beacon status
+app.get('/beaconInfo', function(req, res){
+    console.log("GET request to route /beaconInfo")
+    var data = [{
+        temp:32,
+        light:22
+    },{
+        temp:32,
+        light:22
+    },{
+        temp:32,
+        light:22
+    },{
+        temp:32,
+        light:22
+    }]
+    res.status(200);
+    res.send(data);
+    res.end();
+        console.log("Recieved a request for beacon information of beacon 0");
+})
+
+////////////////
 // custom 404 page
 app.use(function (req, res) {
     res.type('text/plain');
