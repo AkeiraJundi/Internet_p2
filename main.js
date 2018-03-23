@@ -187,7 +187,7 @@ app.get('/beaconInfo', function(req, res){
     res.status(200);
     res.send(data);
     res.end();
-        console.log("Recieved a request for beacon information of beacon 0");
+    console.log("Recieved a request for beacon information of beacon 0");
 })
 
 ////////////////

@@ -17,8 +17,8 @@
     <input id="search_field" type="text">
     <button id="searchbutton">search for location</button>
 
+    <button id="check_status_button">Check Status</button>
     <div id="beacon_status">
-        <button id="check_status_button">Check Status</button>
     </div>
 
 </body>
@@ -94,7 +94,7 @@ $(document).ready(function(){
                     var temp = data[i].temp;
                     var light = data[i].light;
 
-                    $('#beacon_status').text($('#beacon_status').text+"Beacon "+i+":\n\tTemperature: "+temp+"\n\tLight: "+light);
+                    $('#beacon_status').html($('#beacon_status').html()+"Beacon "+i+":<br>Temperature: "+temp+"<br>Light: "+light+"<br>");
                 }
             
         })
